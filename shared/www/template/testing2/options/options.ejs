@@ -1,0 +1,35 @@
+<link rel="stylesheet" href="template/testing2/options/options.css" />
+<div class="options">
+
+    <div class="history">
+        <h2>Previous versions</h2>
+        <div id="versions_list"></div>
+    </div>
+
+
+    <div class="changelog">
+        <h2>Update your changelog</h2>
+        <textarea name="changelog"></textarea>
+    </div>
+
+    <div class="revision">
+        <h2>Set version number</h2>
+        <select class="major">
+            <option value="alpha">alpha</option>
+            <option value="beta">beta</option>
+            <% for( var i = 1; i < 50; i++){ %>
+            <option value="<%= textNumber(i) %>"><%= textNumber(i) %></option>
+            <% } %>
+        </select>
+        <select class="minor">
+            <% for( var i = 1; i < 50; i++){ %>
+            <option value="<%= textNumber(i) %>"><%= textNumber(i) %></option>
+            <% } %>
+        </select>
+    </div>
+
+    <button >Export new version<div class='block_loader'></div></button>
+    <a href="#" class="btn_close">x</a>
+</div>
+<script src="js/phantomizer.js"></script>
+<script type="text/javascript" src="template/testing2/options/options.js"></script>

@@ -1,0 +1,14 @@
+<link rel="stylesheet" href="template/testing2/contact/contact.css" />
+<div class="contacts">
+    <h1 class="title">Contact</h1>
+    <% for(var n in contacts) { %>
+        <% var contact = contacts[n] %>
+        <p class="contact">
+            <i class="icon-user"></i>
+            <% for(var key in contact) { %>
+            <b><%= key %> :</b> <%= contact[key] %><br/>
+            <% } %>
+        </p>
+    <% } %>
+</div>
+<script type="text/javascript" src="template/testing2/contact/contact.js"></script>

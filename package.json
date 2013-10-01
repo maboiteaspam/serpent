@@ -1,0 +1,26 @@
+{
+    "author": "clément",
+    "name": "serpent",
+    "version": "0.1.0",
+    "description": "Web services oriented documentation generator",
+    "private": true,
+    "main": "./lib/serpent",
+    "bin": {
+        "serpent": "./cli/serpent"
+    },
+    "dependencies": {
+        "optimist": "0.x"
+        ,"express": "3.x"
+        ,"underscore": "1.5.x"
+        ,"phantomjs": "1.9.x"
+        ,"node-zip": "1.0.x"
+    },
+    "devDependencies": {
+    },
+    "repository": {
+        "url": ""
+    },
+    "engines": {
+        "node": "*"
+    }
+}

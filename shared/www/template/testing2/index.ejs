@@ -1,0 +1,211 @@
+<link rel="stylesheet" href="template/testing2/index.css" />
+<link rel="stylesheet" href="css/normalize.css" />
+<link rel="stylesheet" href="css/awesome.css" />
+
+<div class="utils">
+    <a href="/contact" class="btn_contact">contact</a>
+    <a href="examples.zip" class="btn_examples">examples</a>
+    <a href="/export" class="btn_export">export</a>
+    <a href="/regen" class="btn_regen">regen</a>
+</div>
+
+<h1 class="project-title"><span class="icon-beer"></span> <%= title %></h1>
+
+
+        <% if( contacts ) { %>
+            <%= this.partial({url: 'template/testing2/contact/contact.ejs'}, {'contacts':contacts}) %>
+        <% } %>
+
+        <%= this.partial({url: 'template/testing2/options/options.ejs'}, {}) %>
+
+
+    <div class="domains">
+    <% for(var n in domains) { %>
+    <% var domain = domains[n] %>
+    <h1><a href="#<%= n %>" name="<%= n %>"><%= domain.title?domain.title:n.replace(/(.+)\.json$/,"$1") %> <span class="length_anot">(<%= sizeOf(domain) %>)</span></a></h1>
+    <div class="domain">
+        <% for(var k in domain.services ) { %>
+        <% var service = domain.services[k] %>
+        <div class="service">
+            <h2 class="title"><a href="#<%= k %>" name="<%= k %>"><%= service.title?service.title:k %>
+                <span class="length_anot">(<%= sizeOf(service.routes) %>)</span></a>
+                <% if( service.description ){ %><pre class="description"><%= service.description %></pre><% } %>
+            </h2>
+            <% for(var route_pattern in service.routes) { %>
+            <% var route_data = service.routes[route_pattern]; %>
+            <div class="route">
+                <h3 class="title">
+                    <% for(var l in route_data.methods) { %>
+                        <% var method = route_data.methods[l]  %>
+                        <span  class="method m_<%= method %>"><a href="#<%= k %>-<%= route_pattern %>-<%= method %>"><%= method %></a></span>
+                    <% } %>
+                    <span class="pattern"><a href="#<%= k %>-<%= route_pattern %>" name="<%= k %>-<%= route_pattern %>"><%= route_pattern %></a></span>
+                    <span class="text"><%= route_data.title %></span>
+                </h3>
+                <div class="content">
+                    <% if( route_data.description ){ %><pre class="description"><%= route_data.description %></pre><% } %>
+
+                    <div class="blackbg">
+
+                    <div class="usages">
+                        <h3 class="title">Usage</h3>
+                        <div class="content">
+                            <% for(var l in route_data.methods) { %>
+                            <% var method = route_data.methods[l]  %>
+                            <div class="method m_<%= method %>">
+                                <div class="entries">
+                                    <% if( sizeOf(route_data.usages[method][route_pattern]) == 1 ) { %>
+                                        <% for( var fw in route_data.usages[method][route_pattern] ){ %>
+                                            <%= fw %>
+                                        <% } %>
+                                    <% }else{ %>
+                                        <select>
+                                            <% for( var fw in route_data.usages[method][route_pattern] ){  %>
+                                            <option value="<%= fw %>"><%= fw %></option>
+                                            <% } %>
+                                        </select>
+                                    <% } %>
+
+                                    <select>
+                                    <option value="<%= route_pattern %>"><%= route_pattern %></option>
+                                        <% for( var l in route_data.alternates ){  %>
+                                    <option value="<%= route_data.alternates[l] %>"><%= route_data.alternates[l] %></option>
+                                        <% } %>
+                                    </select>
+
+                                </div>
+                                <div class="response_content">
+                                <% for(var route_pattern_ in route_data.usages[method] ) { %>
+                                    <% for(var fw in route_data.usages[method][route_pattern_] ) { %>
+                                    <div class="framework <%= fw %> <%= method %>" route="<%= route_pattern_ %>">
+                                        <div class="source_code"><pre><code class="<% fw %>"><%= route_data.usages[method][route_pattern_][fw] %></code></pre></div>
+                                    </div>
+                                    <% } %>
+                                <% } %>
+                                </div>
+                            </div>
+                            <% } %>
+                        </div>
+                    </div>
+
+                    <div class="responses">
+                        <% var response_examples = route_data.examples  %>
+                        <h3 class="title">Response examples</h3>
+                        <div class="content">
+                                <div class="entries">
+                                    <% if( sizeOf(response_examples) == 0 ) { %>
+                                        No responses example are available.
+                                    <% }else if( sizeOf(response_examples) == 1 ) { %>
+                                        <% for( var ex_id in response_examples ){ var expl = response_examples[ex_id] %>
+                                            <%= ex_id %> : <%= expl.description %>
+                                        <% } %>
+                                    <% }else{ %>
+                                        <select>
+                                            <% for( var ex_id in response_examples ){ var expl = response_examples[ex_id] %>
+                                            <option value="<%= ex_id %>"><%= ex_id %> : <%= expl.description %></option>
+                                            <% } %>
+                                        </select>
+                                    <% } %>
+                                </div>
+
+                                <div class="response_content">
+                                    <% for( var ex_id in response_examples ){ var expl = response_examples[ex_id]  %>
+                                        <div><pre><code><%= expl.content %></code></pre></div>
+                                    <% } %>
+                                </div>
+                        </div>
+                    </div>
+
+                    </div>
+
+                    <div class="response_model">
+                        <h3 class="title">Parameters</h3>
+                        <%
+                        var params_by_method = route_data.params_by_method;
+                        var dspld = false;
+                        if( route_data.params_by_method['URL'] && sizeOf(route_data.params_by_method['URL'].properties) > 0 ){
+                            dspld = true;
+                        }
+                        if( route_data.params_by_method['GET'] && sizeOf(route_data.params_by_method['GET'].properties) > 0 ){
+                            dspld = true;
+                        }
+                        if( route_data.params_by_method['POST'] && sizeOf(route_data.params_by_method['POST'].properties) > 0 ){
+                            dspld = true;
+                        }
+                        %>
+                        <div class="entries">
+                            <% if( sizeOf(params_by_method) == 1 ) { %>
+                                <% for( var ref in params_by_method ){ %>
+                                    <% if( sizeOf(params_by_method[ref].properties) > 0 ){ %>
+                                        <%= ref %>
+                                    <% } %>
+                                <% } %>
+                            <% }else if( dspld ) { %>
+                                <select>
+                                    <% for( var ref in params_by_method ){ %>
+                                        <% if( sizeOf(params_by_method[ref].properties) > 0 ){ %>
+                                            <option value="<%= ref %>"><%= ref %></option>
+                                        <% } %>
+                                    <% } %>
+                                </select>
+                            <% } %>
+                        </div>
+                        <div class="response_content">
+                            <% if( route_data.params_by_method['URL'] && sizeOf(route_data.params_by_method['URL'].properties) > 0 ){ %>
+                                <div class="model_inspector">
+                                    <%= this.partial({url: 'template/testing/schema.ejs'}, {'schema':route_data.params_by_method['URL']}) %>
+                                </div>
+                            <% } %>
+                            <% if( route_data.params_by_method['GET'] && sizeOf(route_data.params_by_method['GET'].properties) > 0 ){ %>
+                                <div class="model_inspector">
+                                    <%= this.partial({url: 'template/testing/schema.ejs'}, {'schema':route_data.params_by_method['GET']}) %>
+                                </div>
+                            <% } %>
+                            <% if( route_data.params_by_method['POST'] && sizeOf(route_data.params_by_method['POST'].properties) > 0 ){ %>
+                                <div class="model_inspector">
+                                    <%= this.partial({url: 'template/testing/schema.ejs'}, {'schema':route_data.params_by_method['POST']}) %>
+                                </div>
+                            <% } %>
+                            <% if( dspld == false ){ %>
+                                There is no parameters defined.
+                            <% } %>
+                        </div>
+                    </div>
+
+                    <div class="response_model">
+                        <% var response_models = route_data.response_models %>
+                        <h3 class="title">Response model</h3>
+                        <div class="content">
+                            <div class="entries">
+                                <% if( sizeOf(response_models) == 1 ) { %>
+                                    <% for( var ref in response_models ){ %>
+                                        <%= ref %>
+                                    <% } %>
+                                <% }else{ %>
+                                <select>
+                                    <% for( var ref in response_models ){ %>
+                                    <option value="<%= ref %>"><%= response_models[ref].return_code %> - <%= ref %> - <%= response_models[ref].data_type %></option>
+                                    <% } %>
+                                </select>
+                                <% } %>
+                            </div>
+                            <div class="response_content">
+                                <% for( var ref in response_models ){ %>
+                                    <div class="model_inspector">
+                                        <%= this.partial({url: 'template/testing/schema.ejs'}, {'schema':response_models[ref].model}) %>
+                                    </div>
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <% } %>
+
+        </div>
+        <% } %>
+    </div>
+    <% } %>
+</div>
+<script type="text/javascript" src="template/testing2/index.js"></script>

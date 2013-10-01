@@ -1,0 +1,143 @@
+#!/usr/bin/env node
+
+// load some modules
+var fs = require("fs")
+var path = require("path")
+var optimist = require("optimist")
+var server = require("../lib/server.js")
+
+// parse command line arguments
+var argv = optimist.usage('Serpent command line')
+        // we require  a www path to static assets for the webserver
+        .demand('www')
+        .describe('www', 'WWW path of the static assets')
+        .string('www')
+        // we require  a www path to static assets for the webserver
+        .demand('www_alternate')
+        .describe('www_alternate', 'alternate WWW path of the static assets')
+        .string('www_alternate')
+        // requires an export directory to store portable version of the documentation
+        .demand('export_dir')
+        .describe('export_dir', 'Export path of the documentation')
+        .string('export_dir')
+        // do we start a webserver ?
+        .describe('server', 'Start a built-in web server to read your documentation')
+        .boolean('server')
+        .default('server', false)
+        // Do we export your project ?
+        .describe('export', 'Exort portable version of your project')
+        .boolean('export')
+        .default('export', false)
+        // needs mo info ? User -verbose
+        .describe('verbose', 'more Verbose')
+        .boolean('verbose')
+        .default('verbose', false)
+        // which port to listen for webserver, default stands for 3002
+        .describe('port', 'Configure listened port number for the build-in web server')
+        .boolean('port')
+        .default('port', 3002)
+
+        .argv
+    ;
+
+// let check we have some data to work on
+var www = argv.www || ""
+var www_alternate = argv.www_alternate || ""
+var export_dir = argv.export_dir || ""
+var start_server = argv.server || false
+var do_export = argv.export || false
+var verbose = argv.verbose || false
+var port = argv.port || 3002
+var serpent_path = process.cwd()+"/"+".serpent.json"
+
+
+// if the path exists, ensure it is absolute
+if( fs.existsSync(www) ){
+    www = path.resolve(www)+"/"
+}
+
+// ensure we can find thz config file
+if( fs.existsSync(serpent_path) == false ){
+    console.log("Missing serpent configuration file \n"+"\t"+serpent_path)
+    process.exit(code=0)
+}
+
+// some extra details information
+if( verbose ) console.log("home directory "+www)
+
+// Did you want to start webserver
+if( start_server ){
+    // ensure the www dir is fine and exists
+    if( is_valid_directory(www) == false ){
+        process.exit(code=1)
+    }
+    // here we go.
+    server.start({
+        port:port
+        ,export_dir:export_dir
+        ,www_dir:www
+        ,www_alternate:www_alternate
+        ,verbose:verbose
+        ,serpent_path:serpent_path
+    })
+    // press enter when you are ready to leave
+    readline_toquit(function(){
+        process.exit(code=0)
+    });
+}else if ( do_export ){
+    try{
+        // ensure the www dir is fine and exists
+        if( is_valid_directory(www) == false ){
+            process.exit(code=1)
+        }
+        // here we go.
+        server.start({
+            port:port
+            ,export_dir:export_dir
+            ,www_dir:www
+            ,www_alternate:www_alternate
+            ,verbose:verbose
+            ,serpent_path:serpent_path
+        })
+    }catch(ex){
+        //-
+    }
+}
+
+
+
+function is_valid_directory(d_path){
+    var fs = require("fs")
+    if( fs.existsSync(d_path) ){
+        try{
+            var stats = fs.statSync(d_path)
+            if( stats.isDirectory() ){
+                return true
+            }
+            console.log("Must be a directory : "+d_path)
+        }catch(ex){
+            console.log("Failed to access to : "+d_path)
+        }
+    }else{
+        console.log("Directory must exists : "+www)
+    }
+    return false
+}
+
+function readline_toquit( end_handler ){
+
+    var readline = require('readline')
+    var rl = readline.createInterface(process.stdin, process.stdout);
+
+    rl.question('Press enter to leave...\n', function(answer) {
+        console.log('See you soon !\n\n\n\n\n\n');
+        if( end_handler != null ){
+            end_handler()
+        }
+    });
+
+}
+
+
+
+

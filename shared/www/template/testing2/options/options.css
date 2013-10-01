@@ -1,0 +1,138 @@
+
+#bg_overlay{
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    display: none;
+}
+#bg_overlay.enabled{
+    display:block;
+}
+#bg_overlay .bg_color{
+    opacity: 0;
+    background-color: black;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+}
+#bg_overlay.enabled .bg_color{
+    opacity:0.2;
+}
+
+.options{
+    position:absolute;
+    background-color: white;
+    box-shadow: rgba(0, 0, 0, 0.3) -5px 10px 15px 5px;
+    display: none;
+    top: 75;
+    left: 125;
+    width: 75%;
+    padding: 15px;
+
+    transition: 0.1s;
+    -webkit-transition: 0.1s;
+    -moz-transition:0.1s;
+    -opera-transition:0.1s;
+}
+.options.enabled{
+    display:block;
+}
+
+
+.options .history,
+.options .changelog,
+.options .revision{
+    width:100%
+}
+
+.options .history h2,
+.options .changelog h2,
+.options .revision h2{
+    margin:0;
+}
+
+.options .history ul{
+    margin: 0;
+    padding: 0;
+}
+
+.options .history li{
+    display: inline;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.options .history .revision_item{
+    margin:3px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-color:dimgrey;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 6px;
+    color: rgb(0, 102, 204);
+}
+
+.options .history .revision_item:hover{
+    color: rgb(111,183,40);
+}
+
+.options .changelog textarea{
+    width:100%;
+    height:200px
+}
+
+.options .revision > select{
+    margin-right:15px;
+    padding-right: 100px;
+}
+
+.options .btn_close{
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 1em;
+}
+
+
+
+
+.options>button{
+    margin-top: 10px;
+    float: right;
+    overflow: hidden;
+    position: relative;
+}
+.options .block_loader{
+    background-color: rgb(0, 102, 204);
+    opacity: 0.2;
+    top: 0;
+    width: 0%;
+    height: 25px;
+    border-radius: 3px;
+    position: absolute;
+    left:0%;
+
+    -moz-transition: 0.3s;
+    -webkit-transition: 0.3s;
+    -o-transition: 0.3s;
+    transition: 0.3s;
+}
+.options .block_loader.step1{
+    width: 100%;
+}
+.options .block_loader.step2{
+    left:100%;
+    width: 100%;
+}
+.options .block_loader.step3{
+    left:0%;
+    width: 0%;
+
+    -moz-transition: 0s;
+    -webkit-transition: 0s;
+    -o-transition: 0s;
+    transition: 0s;
+}

@@ -1,0 +1,68 @@
+
+.contacts{
+    padding-left: 3%;
+    padding-right: 3%;
+}
+.contacts .title{
+    cursor: pointer;
+    margin-left: 10;
+    font-size: 3em;
+    margin-bottom: 0;
+}
+.contacts .title:hover{
+    color: rgb(111,183,40);
+}
+.contacts .contact{
+    float: left;
+    padding: 10;
+    padding-left: 70;
+    padding-right: 40;
+    position: relative;
+    border: black 1px solid;
+    margin: 10;
+    white-space: nowrap;
+    line-height: 1.4em;
+    background-color: #ffffff;
+}
+.contacts .contact .icon-user{
+    font-size: 4em;
+    position: absolute;
+    left: 7;
+    top: 3;
+    color: rgb(70,153,255);
+}
+.contacts .contact b{
+    cursor: pointer;
+}
+.contacts .contact b:hover{
+    color: rgb(111,183,40);
+}
+
+
+
+.contacts{
+    height: 0;
+    opacity: 0;
+
+    overflow: hidden;
+    visibility: hidden;
+    -moz-transition: 0.7s;
+    -webkit-transition: 0.7s;
+    -o-transition: 0.7s;
+    transition: 0.7s;
+}
+.contacts .contact{
+    line-height: 0em;
+    -moz-transition: 0.3s;
+    -webkit-transition: 0.3s;
+    -o-transition: 0.3s;
+    transition: 0.3s;
+}
+.contacts.clicked{
+    visibility: visible;
+    height: auto;
+    opacity: 1;
+}
+.contacts.clicked  .contact{
+    line-height: 1.4em;
+}

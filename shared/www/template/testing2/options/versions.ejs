@@ -1,0 +1,13 @@
+<% if( versions.length == 0){ %>
+    No previous version is available.
+<% }else{ %>
+    <ul>
+        <% for( var n in versions ){ %>
+        <li><a class="revision_item"
+                href="#revision-<%= versions[n].name %>"
+                title="Created at <%= versions[n].date %>"
+                name="<%= versions[n].name %>"
+                ><%= versions[n].major %>.<%= versions[n].minor %></a></li>
+        <% } %>
+    </ul>
+<% } %>

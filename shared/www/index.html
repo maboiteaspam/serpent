@@ -1,0 +1,92 @@
+<html>
+<head>
+    <title>Serpent documentation</title>
+    <meta charset="utf-8">
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="stylesheet" href="vendors/highlight.js/styles/tomorrow-night-bright.css">
+    <link rel="stylesheet" href="vendors/regex-colorizer/regexpal.css">
+</head>
+<body>
+<div id="main"></div>
+<script src="vendors/ejs_0.9_alpha_1_production.js"></script>
+<script src="vendors/zepto.js" type="text/javascript"></script>
+<script src="vendors/zepto-size.js" type="text/javascript"></script>
+<script src="vendors/zepto-scroll.js" type="text/javascript"></script>
+<script src="vendors/highlight.js/highlight.pack.js"></script>
+<script src="vendors/regex-colorizer/regex-colorizer.js"></script>
+<script src="js/phantomizer.js"></script>
+<script>
+    // templating helpers
+    function commentText(str){
+        var ret = ""
+        var lines = str.split("\n")
+
+        if( lines.length == 1 ){
+            ret = "// "+lines[0]
+        }else{
+            for( var n in lines ){
+                ret += " * "+lines[n]
+            }
+        }
+        return ret
+    }
+    function sizeOf(o){
+        var i = 0;
+        for(var n in o) i++;
+        return i;
+    }
+    function in_array(o, s){
+        for(var n in o) if( n[0] == s ) return true
+        return false;
+    }
+    function textNumber(num){
+        num = ""+num
+        if( num.match("[0-9]+") && parseInt(num)<10 ){
+            num = "0"+num;
+        }
+        return num
+    }
+
+
+    var queue = phantomizer.queue;
+    // render the defintion only if the app execute JIT
+    queue.render_static(function(next){
+        // load the serpent config and domains definitions
+        $.get("/serpent.json", function(data){
+
+            $("title").html(data.title);
+
+            // render the config to the theme's template
+            var theme = data.theme || "testing"
+            var ejs = new EJS({url:'template/'+theme+'/index.ejs'})
+
+            $("#main").html(ejs.render(data))
+
+            // javascript  nodes inserted into the DOM needs to be manually enabled
+            $("#main").find("script").each(function(k,v){
+                var s = document.createElement("script")
+                if( $(v).has("src") ){
+                    $(s).attr("src", $(v).attr("src") )
+                }else{
+                    s.innerHTML = v.innerHTML;
+                }
+                $(v).remove();
+                $(s).appendTo("body")
+            })
+            next();
+        });
+    })
+    // we always needs to apply for regexcolorizer and hljs
+    queue.render(function(next){
+        hljs.initHighlighting();
+        RegexColorizer.colorizeAll('regex');
+        next()
+    })
+    // go render my app
+    queue.done()
+
+
+</script>
+
+</body>
+</html>

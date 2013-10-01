@@ -1,0 +1,90 @@
+<% var as_property = as_property?as_property:null %>
+<div class="schema <% if( as_property ){ %>property-schema<% } %>">
+
+    <% if( as_property ){ %>
+
+        <% if( schema.readonly ){ %><i class="icon-bolt readonly"></i><% } %>
+        <% if( schema.required ){ %><i class="icon-asterisk required"></i><% } %>
+
+        <span class="property">"<%= as_property %>"</span>
+        <% if( schema.description ){ %><span class="description"><%= schema.description %></span><% } %>
+
+        <div class="property_properties">
+            <% var look_props = ['name',
+            ,'type'
+            ,'name'
+            ,'uniqueItems'
+            ,'minLength','maxLength'
+            ,'minItems','maxItems'
+            ,'minimum','exclusiveMinimum'
+            ,'maximum','exclusiveMaximum'
+            ,'pattern'
+            ] %>
+            <% for( var n in look_props ){ %>
+                <% var look_prop = look_props[n] %>
+                <% if( schema[look_prop] ){ %>
+                    <span class="property-name prop-<%= look_prop %>"><%= look_prop %></span>
+                    <span class="property-value value-<%= look_prop %>">
+                        <% if( look_prop == 'pattern' ){ %><span class="regex"><%= schema[look_prop]  %></span><% }else{ %><%= schema[look_prop] %><% } %>
+                    </span>
+                    <br/>
+                <% } %>
+            <% } %>
+
+        <% if( schema.type == "object" && schema.properties ){ %>
+            <div class="object_properties">
+                <span class="open">{</span>
+                <div class="properties">
+                    <% for(var p in schema.properties ) { %>
+                    <%= this.partial({url: 'template/testing/schema.ejs'}, {'schema':schema.properties[p], 'as_property':p}) %>
+                    <% } %>
+                </div>
+                <span class="close">}</span>
+            </div>
+        <% } %>
+
+        <% if( schema.type == "array" && schema.items ){ %>
+            <div class="object_properties">
+                <span class="open">[</span>
+                <div class="properties">
+                    <%= this.partial({url: 'template/testing/schema.ejs'}, {'schema':schema.items}) %>
+                </div>
+                <span class="close">]</span>
+            </div>
+        <% } %>
+
+
+
+
+        </div>
+    <% }else{ %>
+        <% if( schema.title ){ %><span class="title"><%= schema.title %></span><% } %>
+        <% if( schema.description ){ %><span class="description"><%= schema.description %></span><% } %>
+
+        <% if( schema.type == "object" && schema.properties ){ %>
+        <div class="object_properties">
+            <span class="open">{</span>
+            <div class="properties">
+                <% for(var p in schema.properties ) { %>
+                <%= this.partial({url: 'template/testing/schema.ejs'}, {'schema':schema.properties[p], 'as_property':p}) %>
+                <% } %>
+            </div>
+            <span class="close">}</span>
+        </div>
+        <% } %>
+
+
+
+        <% if( schema.type == "array" && schema.items ){ %>
+        <div class="object_properties">
+            <span class="open">[</span>
+            <div class="properties">
+                <%= this.partial({url: 'template/testing/schema.ejs'}, {'schema':schema.items}) %>
+            </div>
+            <span class="close">]</span>
+        </div>
+        <% } %>
+
+    <% } %>
+
+</div>

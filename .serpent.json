@@ -1,0 +1,51 @@
+{
+    "title":"Documentation for [project name] by Serpent"
+    ,"theme":"testing2"
+    ,"export_pattern":"v.%major%.%minor%"
+    ,"used_framework":{
+        "Zepto":{
+            "language":"javascript"
+        }
+        ,"jQuery":{
+            "language":"javascript"
+        }
+        ,"Php":{
+            "language":"php"
+        }
+        ,"Curl":{
+            "language":"bash"
+        }
+    }
+
+    ,"contacts":{
+        "some_id":{
+            "name":"Clément"
+            ,"function":"Some Coder"
+            ,"phone":"0xB16B00B5"
+            ,"mobile":"0x8BADF00D"
+            ,"email":"no@way.com"
+        }
+    }
+
+    ,"paths":{
+        "params":"documentation/params.json"
+        ,"models":["documentation/models/"]
+        ,"examples":["documentation/examples/"]
+        ,"domains":["documentation/domains/"]
+    }
+
+    ,"generator":{
+        "binary":"php"
+        ,"backend":"php"
+        ,"bootstrap":"node_modules/serpent/ext/connectors/php/php.php"
+        ,"src_path":"php-app/"
+        ,"tgt_paths":{
+            "params":"documentation/params.json"
+            ,"models":"documentation/models/"
+            ,"examples":"documentation/examples/"
+            ,"domains":"documentation/domains/"
+        }
+        ,"app_bootstrap":""
+        ,"fake_var":["app","ControleurWeb"]
+    }
+}
